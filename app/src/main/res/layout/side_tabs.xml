@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="64dp"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="20dp"
+    android:id="@+id/tabs"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/tRequest"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/home"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/tStores"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/calendar"/>
+            <TextView
+                android:id="@+id/ad_favorites_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/badge_circle"
+                android:gravity="center"
+                android:maxHeight="20dp"
+                android:minWidth="20dp"
+                android:text="13"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/tFavorites"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/notes"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tMore"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_tab_browser"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tNotes"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/mail"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tRSS"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/rss"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tSomething"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_tab_browser"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_margin"
+    tools:context="com.miiblet.black.app.MessageDialogFragment" >
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="@dimen/tab_side_length"
+        android:layout_height="@dimen/tab_side_length"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:contentDescription="@string/desc"
+        android:scaleType="centerCrop" />
+    
+    <TextView
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Hi" />
+
+</FrameLayout>

@@ -1,0 +1,121 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
+
+        <FrameLayout
+            android:padding="0dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="#33FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:visibility="gone"
+                    android:id="@+id/card"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="#000000"
+                    android:padding="0dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/imageView"
+                        android:padding="0dp"
+                        android:src="#DEDEDE"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginTop="0dp"
+                        android:background="#ffffff"
+                        android:scaleType="centerCrop"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="20dp"
+                        android:gravity="left"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:text="Caption!"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+
+                        android:id="@+id/txtCaption"/>
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:background="#55FFFFFF"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="0dp"
+                    android:padding="0dp"
+                    android:background="#00ffffff">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="0dp"
+                        android:paddingTop="0dp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:text="Name"
+                        android:textColor="#EEEEEE"
+                        android:id="@+id/from" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="₹ 600"
+                        android:paddingLeft="0dp"
+                        android:textStyle="italic"
+                        android:id="@+id/subject"
+                        android:textColor="#EEEEEE"
+                        android:layout_below="@+id/from"
+                        android:layout_alignLeft="@+id/from"
+                        android:layout_alignStart="@+id/from" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="₹ 600"
+                        android:paddingLeft="0dp"
+                        android:textStyle="normal"
+                        android:id="@+id/snippet"
+                        android:textColor="#7F8C8D"
+                        android:layout_below="@+id/subject"
+                        android:layout_alignLeft="@+id/subject"
+                        android:layout_alignStart="@+id/subject" />
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+        </FrameLayout>
+</LinearLayout>

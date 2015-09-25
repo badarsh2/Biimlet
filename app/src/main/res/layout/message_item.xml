@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/message_item_height" >
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="@dimen/message_item_height"
+        android:layout_height="@dimen/message_item_height"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:contentDescription="@string/desc"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/sender"
+        style="@android:style/Widget.Holo.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/activity_margin_half"
+        android:layout_toLeftOf="@+id/datetime"
+        android:layout_toRightOf="@id/photo"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@android:style/Widget.Holo.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sender"
+        android:layout_toLeftOf="@id/datetime"
+        android:layout_toRightOf="@id/photo"
+        android:maxLines="1"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/body_preview"
+        style="@android:style/Widget.Holo.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/title"
+        android:layout_toLeftOf="@id/datetime"
+        android:layout_toRightOf="@id/photo"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/datetime"
+        style="@android:style/Widget.Holo.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:padding="@dimen/activity_margin_half"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

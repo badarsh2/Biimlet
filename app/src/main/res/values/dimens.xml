@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="clock_height">160dp</dimen>
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="activity_margin_half">8dp</dimen>
+    <dimen name="activity_margin_quarter">4dp</dimen>
+    <dimen name="tab_side_length">72dp</dimen>
+    <dimen name="message_item_height">72dp</dimen>
+    <dimen name="card_component_length">64dp</dimen>
+    <dimen name="card_component_length_half">32dp</dimen>
+    <dimen name="card_component_margin">24dp</dimen>
+</resources>

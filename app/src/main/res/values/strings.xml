@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Miiblet Sample</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_gmail">GMailActivity</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="title_activity_login">Miiblet</string>
+    <string name="desc">Desc</string>
+</resources>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:background="#555555"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="#555555"
+            android:orientation="vertical">
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Limited time Offer!!!"-->
+                <!--android:id="@+id/confirmOfferView"-->
+                <!--android:textColor="#FF000000"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="20sp"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:padding="5dp"/>-->
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancelbutton"
+                android:src="@drawable/ic_close"
+                android:background="@android:color/holo_red_light"
+                android:layout_gravity="right"
+                android:padding="5dp"
+                android:visibility="invisible"
+                android:layout_marginBottom="5dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/imageView2"
+                android:src="@android:drawable/ic_dialog_alert"
+                android:layout_gravity="center_horizontal" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:id="@+id/dateTimeLayout"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp">
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Heavy Traffic in M1 Expressway"
+                android:id="@+id/offercaption"
+                android:textColor="#FF0000"
+                android:textStyle="bold"
+                android:textSize="22dp"
+                android:gravity="center"
+                android:padding="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Traffic upto 2 kilometres, use of a different route is recommended."
+                android:textColor="#EEEEEE"
+                android:textStyle="bold"
+                android:id="@+id/offerdescription"
+                android:textSize="15sp"
+                android:gravity="center"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:id="@+id/confirmFrameLayout">
+
+                <!--<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/confirm"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/round_rect_submit"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:id="@+id/confirmButton"/>-->
+
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OK"
+                    android:id="@+id/okbutton"
+                    android:textColor="#EEEEEE"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+</LinearLayout>

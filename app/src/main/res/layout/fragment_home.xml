@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:background="#000000"
+    android:padding="@dimen/activity_vertical_margin" >
+
+        <RelativeLayout
+            android:id="@+id/feed_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_component_length"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/warning_icon"
+                style="@style/CardComponent"
+                android:layout_width="@dimen/card_component_length"
+                android:layout_height="@dimen/card_component_length"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="@dimen/activity_margin"
+                android:contentDescription="Desc"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_attention_60_border" />
+
+            <TextSwitcher
+                android:id="@+id/alerts"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/warning_icon" />
+        </RelativeLayout>
+
+</LinearLayout>

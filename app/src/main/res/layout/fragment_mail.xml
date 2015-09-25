@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "MY NOTICES"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_margin="10sp"
+            android:textColor="#DDDDDD"
+            android:layout_gravity="left"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+            <include layout="@layout/mail_item_layout"
+                android:id="@+id/item11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"/>
+        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

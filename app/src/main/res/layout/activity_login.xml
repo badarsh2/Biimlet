@@ -1,0 +1,149 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/loginbg" tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logowide"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:text="Your one stop solution for your day to day needs."/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="#FFFFFF">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Log In"
+                    android:id="@+id/textView1"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:background="#C4E4FD"
+                    android:layout_margin="10dp">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="#00000000"
+                        android:id="@+id/username"
+                        android:layout_marginLeft="10dp"
+                        android:hint="Username"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:background="#C4E4FD"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:hint="Password"
+                        android:id="@+id/password"
+                        android:background="#00000000"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Sign In"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/signinbutton"
+                    android:background="#ca2f2f"
+                    android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Or Log in with"
+                    android:id="@+id/textView2"
+                    android:layout_margin="0dp"
+                    android:layout_gravity="center_horizontal" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/facebooklogin"
+                        android:scaleType="fitXY"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="5dp"/>
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/googlelogin"
+                        android:scaleType="fitXY"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New to Miiblet?"
+                    android:id="@+id/textView3"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center_horizontal" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:text="Sign Up"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:id="@+id/signupbutton"
+                    android:background="#ca2f2f"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

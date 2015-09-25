@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "MY CALENDAR"
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="#DDDDDD"
+            android:layout_gravity="left"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "24 SEP"
+            android:id="@+id/daymonth"
+            android:textSize="28sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:textColor="#DDDDDD"
+            android:layout_gravity="left"/>
+            <AnalogClock
+                android:id="@+id/analogClock"
+                android:layout_width="@dimen/clock_height"
+                android:layout_height="@dimen/clock_height"
+                android:paddingBottom="@dimen/activity_margin"
+                android:paddingLeft="@dimen/activity_margin" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+            <CalendarView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+                android:theme="@style/Theme.AppCompat"></CalendarView>
+        </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
