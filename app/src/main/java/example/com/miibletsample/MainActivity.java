@@ -148,7 +148,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 credential.setSelectedAccountName(null);
+
                 refreshResults();
+                try {
+                    FragmentGmail.listView.setVisibility(View.GONE);
+                    FragmentGmail.progressBar.setVisibility(View.VISIBLE);
+                }catch (Exception e){}
             }
         });
 
