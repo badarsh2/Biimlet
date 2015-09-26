@@ -52,14 +52,14 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         try {
             mActivity.clearResultsText();
-            SharedPreferences sharedPreferences = mActivity.getSharedPreferences("MAILS", 0);
+            SharedPreferences sharedPreferences = mActivity.getSharedPreferences("MAILS"+mActivity.getPreferences(Context.MODE_PRIVATE).getString(MainActivity.PREF_ACCOUNT_NAME,""), 0);
             String his = sharedPreferences.getString("history", "");
             String mails = sharedPreferences.getString("mails", null);
             if(his.equals("")) {
                 mActivity.updateResultsTextGmail(listMessagesMatchingQuery());
             }
             else {
-                mActivity.updateResultsTextGmail(updateMessages(new BigInteger(his),mails));
+                mActivity.updateResultsTextGmail(updateMessages(new BigInteger(his), mails));
             }
 
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
@@ -124,7 +124,7 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
             public void onSuccess(Message mes, HttpHeaders responseHeaders)
                     throws IOException {
                 if(s.size()==0){
-                    SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS", Context.MODE_PRIVATE);
+                    SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS"+mActivity.getPreferences(Context.MODE_PRIVATE).getString(MainActivity.PREF_ACCOUNT_NAME,""), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString("history",mes.getHistoryId()+"");
                     editor.commit();
@@ -160,7 +160,7 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
 
         }
         b.execute();
-        SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS", Context.MODE_PRIVATE);
+        SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS"+mActivity.getPreferences(Context.MODE_PRIVATE).getString(MainActivity.PREF_ACCOUNT_NAME,""), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("mails", st.toString());
         editor.commit();
@@ -191,7 +191,7 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
             public void onSuccess(Message mes, HttpHeaders responseHeaders)
                     throws IOException {
                 if(s.size()==0){
-                    SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS", Context.MODE_PRIVATE);
+                    SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS"+mActivity.getPreferences(Context.MODE_PRIVATE).getString(MainActivity.PREF_ACCOUNT_NAME,""), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString("history",mes.getHistoryId()+"");
                     editor.commit();
@@ -239,7 +239,7 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
             s.add(eMail);
             st.put(obj);
         }
-        SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS", Context.MODE_PRIVATE);
+        SharedPreferences sharedpreferences = mActivity.getSharedPreferences("MAILS"+mActivity.getPreferences(Context.MODE_PRIVATE).getString(MainActivity.PREF_ACCOUNT_NAME,""), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("mails", st.toString());
         editor.commit();

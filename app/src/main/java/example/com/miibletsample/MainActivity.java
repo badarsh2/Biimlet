@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    private static final String PREF_ACCOUNT_NAME = "accountName";
+    public static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY, GmailScopes.GMAIL_READONLY };
     private ImageSwitcher ads;
     private Handler adHandler;
@@ -143,6 +143,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         GmailApi();
         ads = (ImageSwitcher) findViewById(R.id.ads);
         startAdLoop();
+
+        findViewById(R.id.switch_acc).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                credential.setSelectedAccountName(null);
+                refreshResults();
+            }
+        });
 
     }
 
