@@ -4,26 +4,23 @@ import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,10 +48,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.api.services.gmail.GmailScopes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,11 +59,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private NonSwipeablePager viewPager;
     LinearLayout[] layouts;
     com.google.api.services.calendar.Calendar mService;
+    com.google.api.services.gmail.Gmail mServicegmail;
+    public static List<EMail> dataStrings = new ArrayList<>();
 
     GoogleAccountCredential credential;
     private TextView mStatusText;
     private TextView mResultsText;
-    ProgressDialog mProgress;
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -77,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY, GmailScopes.GMAIL_READONLY };
     private ImageSwitcher ads;
     private Handler adHandler;
     private Runnable adRunner;
@@ -115,8 +110,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onPageSelected(int position) {
                 setSelectedTab(position);
-                if(position==0)
-                {
+                if (position == 0) {
 
                 }
             }
@@ -134,8 +128,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mResultsText.setVerticalScrollBarEnabled(true);
         mResultsText.setMovementMethod(new ScrollingMovementMethod());
 
-        mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Calendar API ...");
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -148,7 +140,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 transport, jsonFactory, credential)
                 .setApplicationName("Google Calendar API Android Quickstart")
                 .build();
-
+        GmailApi();
         ads = (ImageSwitcher) findViewById(R.id.ads);
         startAdLoop();
 
@@ -374,8 +366,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             chooseAccount();
         } else {
             if (isDeviceOnline()) {
-                mProgress.show();
+
                 new ApiAsyncTask(this).execute();
+                new ApiAsyncTaskGmail(this).execute();
             } else {
                 mStatusText.setText("No network connection available.");
             }
@@ -418,7 +411,31 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
         });
     }
+    public void updateResultsTextGmail(final List<EMail> dataStrings) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (dataStrings == null) {
+                    Toast.makeText(getApplicationContext(), "Error retrieving data!", Toast.LENGTH_SHORT).show();
+                } else if (dataStrings.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "No data found.", Toast.LENGTH_SHORT).show();
+                } else {
+                    MainActivity.dataStrings = dataStrings;
+                    try{
+                        FragmentGmail.customAdapter.changeData(MainActivity.dataStrings);
+                        FragmentGmail.listView.setAdapter(FragmentGmail.customAdapter);
+                        FragmentGmail.listView.setVisibility(View.VISIBLE);
+                        FragmentGmail.progressBar.setVisibility(View.GONE);
+                    }catch (Exception e){}
+                    Toast.makeText(getApplicationContext(), "Data retrieved using" +
+                            " the Gmail API:", Toast.LENGTH_SHORT).show();
 
+                    //listView.setAdapter(new CustomAdapter(getActivity(), dataStrings));
+                    //mResultsText.setText(TextUtils.join("\n\n", dataStrings));
+                }
+            }
+        });
+    }
     /**
      * Show a status message in the list header TextView; called from background
      * threads and async tasks that need to update the UI (in the UI thread).
@@ -528,6 +545,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
         };
         adHandler.postDelayed(adRunner, LOOP_TIME);
+    }
+
+    public void GmailApi(){
+        // Initialize credentials and service object.
+        mServicegmail = new com.google.api.services.gmail.Gmail.Builder(
+                transport, jsonFactory, credential)
+                .setApplicationName("Gmail API Android Quickstart")
+                .build();
+        /*if (isGooglePlayServicesAvailable()) {
+            refreshResults();
+        } else {
+            Toast.makeText(getApplicationContext(), "Google Play Services required: " +
+                    "after installing, close and relaunch this app.", Toast.LENGTH_SHORT).show();
+        }*/
     }
 }
 

@@ -62,5 +62,8 @@ public class CustomAdapter extends BaseAdapter {
         rowView.setTag(holder);
         return rowView;
     }
+    public void changeData(List<EMail> modeldata) {
+        this.modelData = modeldata;
+    }
 
 }

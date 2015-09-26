@@ -50,9 +50,7 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
             mActivity.updateStatus("The following error occurred:\n" +
                     e.getMessage());
         }
-        if (mActivity.mProgress.isShowing()) {
-            mActivity.mProgress.dismiss();
-        }
+
         return null;
     }
 
