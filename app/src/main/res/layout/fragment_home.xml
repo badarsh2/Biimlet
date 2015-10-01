@@ -14,7 +14,8 @@
             android:layout_height="@dimen/card_component_length"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true" >
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom">
 
             <ImageView
                 android:id="@+id/warning_icon"

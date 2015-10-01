@@ -394,13 +394,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
      * that need to update the UI (in the UI thread).
      */
     public void clearResultsText() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mStatusText.setText("Retrieving data…");
-                mResultsText.setText("");
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mStatusText.setText("Retrieving data…");
+//                mResultsText.setText("");
+//            }
+//        });
     }
 
     /**
