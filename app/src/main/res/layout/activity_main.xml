@@ -19,43 +19,259 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <example.com.miibletsample.NonSwipeablePager
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:padding="10dp"
-        android:id="@+id/viewpager"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CALENDARS"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <example.com.miibletsample.NonSwipeablePager
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:padding="10dp"
+            android:id="@+id/viewpager"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:visibility="gone"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:id="@+id/textslayout">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:src="#DDDDDD"
-                android:layout_margin="5dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading...."
-        android:id="@+id/statustext"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="18sp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading...."
-        android:layout_margin="5dp"
-        android:textColor="#AAAAAA"
-        android:id="@+id/resultstext"/>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/calendarframe1">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    android:orientation="vertical"
+                    android:background="#11FFFFFF"
+                    android:id="@+id/frame1content"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Account name"
+                        android:id="@+id/accountname1"
+                        android:textColor="#EEEEEE"
+                        android:textStyle="italic"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:id="@+id/statustext1"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:textColor="#AAAAAA"
+                        android:layout_margin="5dp"
+                        android:id="@+id/resultstext1"/>
+            `   </LinearLayout>
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/calendarframe2">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textStyle="italic"
+                    android:id="@+id/frame2activate"
+                    android:text="Touch to add another account"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="#11FFFFFF"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:id="@+id/frame2content"
+                    android:background="#11FFFFFF"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Account name"
+                        android:id="@+id/accountname2"
+                        android:textColor="#EEEEEE"
+                        android:textStyle="italic"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:id="@+id/statustext2"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:textColor="#AAAAAA"
+                        android:id="@+id/resultstext2"/>
+                    `   </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:id="@+id/textslayout2">
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/calendarframe3">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textStyle="italic"
+                    android:id="@+id/frame3activate"
+                    android:text="Touch to add another account"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="#11FFFFFF"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:background="#11FFFFFF"
+                    android:id="@+id/frame3content"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Account name"
+                        android:id="@+id/accountname3"
+                        android:textColor="#EEEEEE"
+                        android:textStyle="italic"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:id="@+id/statustext3"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:textColor="#AAAAAA"
+                        android:layout_margin="5dp"
+                        android:id="@+id/resultstext3"/>
+                    `   </LinearLayout>
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/calendarframe4"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textStyle="italic"
+                    android:id="@+id/frame4activate"
+                    android:text="Touch to add another account"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="#11FFFFFF"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:background="#11FFFFFF"
+                    android:id="@+id/frame4content"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Account name"
+                        android:id="@+id/accountname4"
+                        android:textColor="#EEEEEE"
+                        android:textStyle="italic"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:id="@+id/statustext4"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading...."
+                        android:textColor="#AAAAAA"
+                        android:id="@+id/resultstext4"/>
+                    `   </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:visibility="visible"-->
+            <!--android:orientation="vertical"-->
+            <!--android:id="@+id/textslayout">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="2dp"-->
+                <!--android:src="#DDDDDD"-->
+                <!--android:layout_margin="5dp" />-->
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Loading...."-->
+        <!--android:id="@+id/statustext"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="18sp"/>-->
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Loading...."-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:textColor="#AAAAAA"-->
+        <!--android:id="@+id/resultstext"/>-->
+        <!--</LinearLayout>-->
     </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"

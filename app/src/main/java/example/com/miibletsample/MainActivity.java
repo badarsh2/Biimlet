@@ -78,13 +78,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Runnable adRunner;
     private int adIndex = 0;
     private static final int LOOP_TIME = 5000;
+    private int active;
+
+    public static final String MyPREFERENCES = "CalendarPrefs" ;
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
+    private LinearLayout frame1content, frame2content, frame3content, frame4content;
+    private TextView frame1activate, frame2activate, frame3activate, frame4activate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        offerdialog();
+        //offerdialog();
 
         findViewById(R.id.tRequest).setOnClickListener(this);
         findViewById(R.id.tStores).setOnClickListener(this);
@@ -121,10 +128,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
         });
 
-        mStatusText = (TextView) findViewById(R.id.statustext);
+        mStatusText = (TextView) findViewById(R.id.statustext1);
         mStatusText.setText("Retrieving data...");
 
-        mResultsText = (TextView) findViewById(R.id.resultstext);
+        mResultsText = (TextView) findViewById(R.id.resultstext1);
         mResultsText.setVerticalScrollBarEnabled(true);
         mResultsText.setMovementMethod(new ScrollingMovementMethod());
 
@@ -153,10 +160,50 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 try {
                     FragmentGmail.listView.setVisibility(View.GONE);
                     FragmentGmail.progressBar.setVisibility(View.VISIBLE);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
         });
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        active = sharedpreferences.getInt("active", 1);
+
+        frame2activate = (TextView) findViewById(R.id.frame2activate);
+        frame2content = (LinearLayout) findViewById(R.id.frame2content);
+        frame3activate = (TextView) findViewById(R.id.frame3activate);
+        frame3content = (LinearLayout) findViewById(R.id.frame3content);
+        frame4activate = (TextView) findViewById(R.id.frame4activate);
+        frame4content = (LinearLayout) findViewById(R.id.frame4content);
+        findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
+        activatecalendars();
+        togglevisibility(false, 0);
+
+    }
+
+    private void activatecalendars() {
+        togglevisibility(true, active);
+        frame2activate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                frame2activate.setVisibility(View.GONE);
+                frame2content.setVisibility(View.VISIBLE);
+                togglevisibility(true, 2);
+                editor = sharedpreferences.edit();
+                editor.putInt("active", 2);
+                editor.apply();
+            }
+        });
+        frame3activate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                frame3activate.setVisibility(View.GONE);
+                frame2content.setVisibility(View.VISIBLE);
+                togglevisibility(true, 3);
+                editor = sharedpreferences.edit();
+                editor.putInt("active", 3);
+                editor.apply();
+            }
+        });
     }
 
     @Override
@@ -226,38 +273,82 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.tRequest:
                 setSelectedTab(0);
                 viewPager.setCurrentItem(0, false);
-                findViewById(R.id.textslayout).setVisibility(View.GONE);
+                togglevisibility(false, 0);
+                findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 break;
             case R.id.tStores:
                 setSelectedTab(1);
                 viewPager.setCurrentItem(1, false);
-                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
+                //Toast.makeText(getApplicationContext(), String.valueOf(active), Toast.LENGTH_SHORT).show();
+                togglevisibility(true, active);
+                findViewById(R.id.viewpager).setVisibility(View.GONE);
                 break;
             case R.id.tFavorites:
                 setSelectedTab(2);
                 viewPager.setCurrentItem(2, false);
-                findViewById(R.id.textslayout).setVisibility(View.GONE);
+                togglevisibility(false, 0);
+                findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 break;
             case R.id.tMore:
                 setSelectedTab(3);
                 viewPager.setCurrentItem(3, false);
-                findViewById(R.id.textslayout).setVisibility(View.GONE);
+                togglevisibility(false, 0);
+                findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 break;
             case R.id.tNotes:
                 setSelectedTab(4);
                 viewPager.setCurrentItem(4, false);
-                findViewById(R.id.textslayout).setVisibility(View.GONE);
+                togglevisibility(false, 0);
+                findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 break;
             case R.id.tRSS:
                 setSelectedTab(5);
                 viewPager.setCurrentItem(5, false);
-                findViewById(R.id.textslayout).setVisibility(View.GONE);
+                togglevisibility(false, 0);
+                findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 break;
         }
     }
 
+    private void togglevisibility(Boolean stat, int calno)
+    {
+        if(stat==true) {
+            if(calno==0) {
+                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
+                findViewById(R.id.textslayout2).setVisibility(View.GONE);
+            }
+            else if(calno==1) {
+//                frame2activate.setVisibility(View.GONE);
+//                frame2content.setVisibility(View.VISIBLE);
+                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
+                findViewById(R.id.textslayout2).setVisibility(View.GONE);
+            }
+            else if(calno==2) {
+                frame2activate.setVisibility(View.GONE);
+                frame2content.setVisibility(View.VISIBLE);
+                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
+                findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
+            }
+            else if(calno==3) {
+                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
+                findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
+                findViewById(R.id.calendarframe4).setVisibility(View.VISIBLE);
+                frame4content.setVisibility(View.GONE);
+                frame4activate.setVisibility(View.VISIBLE);
+                frame3activate.setVisibility(View.GONE);
+                frame3content.setVisibility(View.VISIBLE);
+                frame2activate.setVisibility(View.GONE);
+                frame2content.setVisibility(View.VISIBLE);
+            }
+        }
+        else {
+            findViewById(R.id.textslayout).setVisibility(View.GONE);
+            findViewById(R.id.textslayout2).setVisibility(View.GONE);
+        }
+    }
+
     private void setSelectedTab(int index) {
-        for (int i =0; i< layouts.length; i++ ){
+        for (int i =0; i< layouts.length; i++){
             layouts[i].setBackgroundColor(Color.TRANSPARENT);
         }
         layouts[index].setBackgroundColor(Color.parseColor("#333344"));
