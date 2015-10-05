@@ -116,7 +116,7 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
         //}
 
 
-        BatchRequest b = mActivity.mService.batch();
+        BatchRequest b = mActivity.mServicegmail.batch();
 
         JsonBatchCallback<Message> bc = new JsonBatchCallback<Message>() {
 
@@ -183,7 +183,7 @@ public class ApiAsyncTaskGmail extends AsyncTask<Void, Void, Void> {
                 break;
             }
         }*/
-        BatchRequest b = mActivity.mService.batch();
+        BatchRequest b = mActivity.mServicegmail.batch();
 
         JsonBatchCallback<Message> bc = new JsonBatchCallback<Message>() {
 

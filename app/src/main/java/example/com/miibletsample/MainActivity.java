@@ -19,7 +19,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -58,13 +57,15 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
     private NonSwipeablePager viewPager;
     LinearLayout[] layouts;
-    com.google.api.services.calendar.Calendar mService;
+    com.google.api.services.calendar.Calendar[] mService=new com.google.api.services.calendar.Calendar[4];
     com.google.api.services.gmail.Gmail mServicegmail;
     public static List<EMail> dataStrings = new ArrayList<>();
 
-    GoogleAccountCredential credential;
-    private TextView mStatusText;
-    private TextView mResultsText;
+    GoogleAccountCredential[] credential=new GoogleAccountCredential[4];
+    GoogleAccountCredential credentialGmail;
+    private TextView[] mStatusText=new TextView[4];
+    private TextView[] mResultsText=new TextView[4];
+    private TextView[] acntname = new TextView[4];
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -78,8 +79,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Runnable adRunner;
     private int adIndex = 0;
     private static final int LOOP_TIME = 5000;
-    private int active;
-
+    public static int active;
+    static int GMAIL_FLAG=0;
     public static final String MyPREFERENCES = "CalendarPrefs" ;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
@@ -128,25 +129,50 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
         });
 
-        mStatusText = (TextView) findViewById(R.id.statustext1);
-        mStatusText.setText("Retrieving data...");
+        mStatusText[0] = (TextView) findViewById(R.id.statustext1);
 
-        mResultsText = (TextView) findViewById(R.id.resultstext1);
-        mResultsText.setVerticalScrollBarEnabled(true);
-        mResultsText.setMovementMethod(new ScrollingMovementMethod());
+        mStatusText[1] = (TextView) findViewById(R.id.statustext2);
 
+        mStatusText[2] = (TextView) findViewById(R.id.statustext3);
+
+        mStatusText[3] = (TextView) findViewById(R.id.statustext4);
+        //mStatusText.setText("Retrieving data...");
+
+        mResultsText[0] = (TextView) findViewById(R.id.resultstext1);
+        mResultsText[1] = (TextView) findViewById(R.id.resultstext2);
+        mResultsText[2] = (TextView) findViewById(R.id.resultstext3);
+        mResultsText[3] = (TextView) findViewById(R.id.resultstext4);
+        acntname[0] = (TextView)findViewById(R.id.accountname1);
+        acntname[1] = (TextView)findViewById(R.id.accountname2);
+        acntname[2] = (TextView)findViewById(R.id.accountname3);
+        acntname[3] = (TextView)findViewById(R.id.accountname4);
+        for(int i=0;i<4;i++) {
+            mResultsText[i].setVerticalScrollBarEnabled(true);
+            mResultsText[i].setMovementMethod(new ScrollingMovementMethod());
+        }
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        active = sharedpreferences.getInt("active", 0);
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        credential = GoogleAccountCredential.usingOAuth2(
+        for(int i=0;i<4;i++) {
+            credential[i] = GoogleAccountCredential.usingOAuth2(
+                    getApplicationContext(), Arrays.asList(SCOPES))
+                    .setBackOff(new ExponentialBackOff())
+                    .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME + i, null));
+            String name = settings.getString(PREF_ACCOUNT_NAME+i, "");
+            if(!name.equals("")) {
+                acntname[i].setText(name);
+            }
+            mService[i] = new com.google.api.services.calendar.Calendar.Builder(
+                    transport, jsonFactory, credential[i])
+                    .setApplicationName("Google Calendar API Android Quickstart")
+                    .build();
+        }
+        credentialGmail = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff())
                 .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
-
-        mService = new com.google.api.services.calendar.Calendar.Builder(
-                transport, jsonFactory, credential)
-                .setApplicationName("Google Calendar API Android Quickstart")
-                .build();
         GmailApi();
         ads = (ImageSwitcher) findViewById(R.id.ads);
         startAdLoop();
@@ -154,19 +180,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         findViewById(R.id.switch_acc).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                credential.setSelectedAccountName(null);
-
-                refreshResults();
-                try {
-                    FragmentGmail.listView.setVisibility(View.GONE);
-                    FragmentGmail.progressBar.setVisibility(View.VISIBLE);
-                } catch (Exception e) {
+                if(viewPager.getCurrentItem()==4) {
+                    credentialGmail.setSelectedAccountName(null);
+                    startActivityForResult(
+                            credentialGmail.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+                    GMAIL_FLAG=1;
+                    try {
+                        FragmentGmail.listView.setVisibility(View.GONE);
+                        FragmentGmail.progressBar.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                    }
                 }
             }
         });
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        active = sharedpreferences.getInt("active", 1);
+
 
         frame2activate = (TextView) findViewById(R.id.frame2activate);
         frame2content = (LinearLayout) findViewById(R.id.frame2content);
@@ -188,9 +216,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 frame2activate.setVisibility(View.GONE);
                 frame2content.setVisibility(View.VISIBLE);
                 togglevisibility(true, 2);
-                editor = sharedpreferences.edit();
-                editor.putInt("active", 2);
-                editor.apply();
+                refreshResults(active);
+
             }
         });
         frame3activate.setOnClickListener(new View.OnClickListener() {
@@ -199,9 +226,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 frame3activate.setVisibility(View.GONE);
                 frame2content.setVisibility(View.VISIBLE);
                 togglevisibility(true, 3);
-                editor = sharedpreferences.edit();
-                editor.putInt("active", 3);
-                editor.apply();
+                refreshResults(active);
             }
         });
     }
@@ -210,9 +235,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         if (isGooglePlayServicesAvailable()) {
-            refreshResults();
+            if(active>0)
+            refreshResults(active-1);
+            else
+                refreshResults(0);
         } else {
-            mStatusText.setText("Google Play Services required: " +
+            mStatusText[active-1].setText("Google Play Services required: " +
                     "after installing, close and relaunch this app.");
         }
     }
@@ -233,20 +261,39 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        credential.setSelectedAccountName(accountName);
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
-                        editor.commit();
+                        if(GMAIL_FLAG==0) {
+                            credential[active].setSelectedAccountName(accountName);
+                            editor = sharedpreferences.edit();
+                            editor.putInt("active", ++active);
+                            editor.apply();
+                            SharedPreferences settings =
+                                    getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString(PREF_ACCOUNT_NAME + (active - 1), accountName);
+                            editor.commit();
+                        }
+                        else {
+                            if (isDeviceOnline()) {
+                                credentialGmail.setSelectedAccountName(accountName);
+                                SharedPreferences settings =
+                                        getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString(PREF_ACCOUNT_NAME , accountName);
+                                editor.commit();
+                                new ApiAsyncTaskGmail(this).execute();
+                            } else {
+                                    Toast.makeText(getApplicationContext(),"No network connection available.",Toast.LENGTH_SHORT).show();
+                            }
+                            GMAIL_FLAG=0;
+                        }
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-                    mStatusText.setText("Account unspecified.");
+                    mStatusText[active-1].setText("Account unspecified.");
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode != RESULT_OK) {
-                    chooseAccount();
+                    chooseAccount(active);
                 }
                 break;
         }
@@ -465,16 +512,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         //alertDialog.show();
     }
 
-    private void refreshResults() {
-        if (credential.getSelectedAccountName() == null) {
-            chooseAccount();
+    private void refreshResults(int i) {
+        if (credential[i].getSelectedAccountName() == null) {
+            chooseAccount(i);
         } else {
             if (isDeviceOnline()) {
 
                 new ApiAsyncTask(this).execute();
                 new ApiAsyncTaskGmail(this).execute();
             } else {
-                mStatusText.setText("No network connection available.");
+                int p=i;
+                while(p>=0) {
+                    mStatusText[p].setText("No network connection available.");
+                    p--;
+                }
             }
         }
     }
@@ -504,13 +555,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (dataStrings == null) {
-                    mStatusText.setText("Error retrieving data!");
-                } else if (dataStrings.size() == 0) {
-                    mStatusText.setText("NO UPCOMING EVENTS.");
-                } else {
-                    mStatusText.setText("UPCOMING EVENTS");
-                    mResultsText.setText(TextUtils.join("\n", dataStrings));
+                for(int i=0;i<active;i++) {
+                    if (dataStrings.get(i) == null) {
+                        mStatusText[i].setText("Error retrieving data!");
+                    } else if (dataStrings.get(i).equals("")) {
+                        mStatusText[i].setText("NO UPCOMING EVENTS.");
+                    } else {
+                        mStatusText[i].setText("UPCOMING EVENTS");
+                        mResultsText[i].setText(dataStrings.get(i));
+                    }
                 }
             }
         });
@@ -549,7 +602,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mStatusText.setText(message);
+                //mStatusText[active-1].setText(message);
             }
         });
     }
@@ -558,9 +611,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
      * Starts an activity in Google Play Services so the user can pick an
      * account.
      */
-    private void chooseAccount() {
+    private void chooseAccount(int i) {
         startActivityForResult(
-                credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+                credential[i].newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
     /**
@@ -654,7 +707,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void GmailApi(){
         // Initialize credentials and service object.
         mServicegmail = new com.google.api.services.gmail.Gmail.Builder(
-                transport, jsonFactory, credential)
+                transport, jsonFactory, credentialGmail)
                 .setApplicationName("Gmail API Android Quickstart")
                 .build();
         /*if (isGooglePlayServicesAvailable()) {

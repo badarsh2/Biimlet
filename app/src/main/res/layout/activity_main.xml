@@ -282,7 +282,7 @@
                 android:id="@+id/switch_acc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Switch GMail Account"/>
+                android:text="CONFIGURE"/>
             <ImageSwitcher
                 android:id="@+id/ads"
                 android:layout_width="match_parent"

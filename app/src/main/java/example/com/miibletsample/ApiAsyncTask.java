@@ -2,8 +2,12 @@ package example.com.miibletsample;
 
 import android.os.AsyncTask;
 
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
@@ -18,7 +22,8 @@ import java.util.List;
  */
 public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
     private MainActivity mActivity;
-
+    List<String> eventStrings;
+    int k=0;
     /**
      * Constructor.
      * @param activity MainActivity that spawned this task.
@@ -59,28 +64,45 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
      * @return List of Strings describing returned events.
      * @throws IOException
      */
+
     private List<String> getDataFromApi() throws IOException {
         // List the next 10 events from the primary calendar.
-        DateTime now = new DateTime(System.currentTimeMillis());
-        List<String> eventStrings = new ArrayList<String>();
-        Events events = mActivity.mService.events().list("primary")
-                .setMaxResults(10)
-                .setTimeMin(now)
-                .setOrderBy("startTime")
-                .setSingleEvents(true)
-                .execute();
-        List<Event> items = events.getItems();
+        BatchRequest b = mActivity.mService[0].batch();
+        JsonBatchCallback<Events> bc = new JsonBatchCallback<Events>() {
 
-        for (Event event : items) {
-            DateTime start = event.getStart().getDateTime();
-            if (start == null) {
-                // All-day events don't have start times, so just use
-                // the start date.
-                start = event.getStart().getDate();
+
+            @Override
+            public void onSuccess(Events events, HttpHeaders responseHeaders) throws IOException {
+                List<Event> items = events.getItems();
+                String eve = "";
+                for (Event event : items) {
+                    DateTime start = event.getStart().getDateTime();
+                    if (start == null) {
+                        // All-day events don't have start times, so just use
+                        // the start date.
+                        start = event.getStart().getDate();
+                    }
+                    eve+=String.format("%s (%s)", event.getSummary(), start);
+                }
+                eventStrings.add(eve);
             }
-            eventStrings.add(
-                    String.format("%s (%s)", event.getSummary(), start));
+
+            @Override
+            public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) throws IOException {
+
+            }
+        };
+        DateTime now = new DateTime(System.currentTimeMillis());
+        eventStrings = new ArrayList<>();
+        for(int i=0;i<MainActivity.active;i++) {
+            mActivity.mService[i].events().list("primary")
+                    .setMaxResults(10)
+                    .setTimeMin(now)
+                    .setOrderBy("startTime")
+                    .setSingleEvents(true)
+                    .queue(b,bc);
         }
+        b.execute();
         return eventStrings;
     }
 
