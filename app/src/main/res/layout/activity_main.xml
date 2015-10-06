@@ -29,18 +29,20 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"/>
 
-        <example.com.miibletsample.NonSwipeablePager
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
-            android:padding="10dp"
-            android:id="@+id/viewpager"
-            android:visibility="gone"/>
-
+            android:layout_weight="1">
+            <example.com.miibletsample.NonSwipeablePager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:id="@+id/viewpager"
+                android:visibility="gone"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:id="@+id/textslayout">
             <FrameLayout
@@ -130,23 +132,13 @@
                         android:text="Loading...."
                         android:textColor="#AAAAAA"
                         android:id="@+id/resultstext2"/>
-                    `   </LinearLayout>
+                    </LinearLayout>
             </FrameLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
-
-            android:visibility="gone"
-            android:id="@+id/textslayout2">
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:id="@+id/calendarframe3">
 
                 <LinearLayout
@@ -181,7 +173,7 @@
                         android:textColor="#AAAAAA"
                         android:layout_margin="5dp"
                         android:id="@+id/resultstext3"/>
-                    `   </LinearLayout>
+                    </LinearLayout>
             </FrameLayout>
             <FrameLayout
                 android:layout_width="0dp"
@@ -221,8 +213,32 @@
                         android:text="Loading...."
                         android:textColor="#AAAAAA"
                         android:id="@+id/resultstext4"/>
-                    `   </LinearLayout>
+                    </LinearLayout>
             </FrameLayout>
+        </LinearLayout>
+            <ImageButton
+                android:id="@+id/switch_acc"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="#00000000"
+                android:padding="0dp"
+                android:visibility="gone"
+                android:scaleType="fitCenter"
+                android:layout_margin="32dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/calendaradd"
+                android:text="CONFIGURE"/>
+</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+
+            android:visibility="gone"
+            android:id="@+id/textslayout2">
+
         </LinearLayout>
 
         <!--<LinearLayout-->
@@ -261,11 +277,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_height="match_parent">
-            <Button
-                android:id="@+id/switch_acc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CONFIGURE"/>
+
             <ImageSwitcher
                 android:id="@+id/ads"
                 android:layout_width="match_parent"

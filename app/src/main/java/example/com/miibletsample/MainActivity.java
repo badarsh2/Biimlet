@@ -199,7 +199,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
                 else if(viewPager.getCurrentItem()==1){
                     togglevisibility(true,active);
-
                 }
             }
         });
@@ -309,6 +308,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 if (resultCode != RESULT_OK) {
                     chooseAccount(active);
                 }
+                else  {
+                    new ApiAsyncTask(this).execute();
+                    new ApiAsyncTaskGmail(this).execute();
+                }
                 break;
         }
 
@@ -336,6 +339,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 viewPager.setCurrentItem(0, false);
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
+                findViewById(R.id.switch_acc).setVisibility(View.GONE);
                 break;
             case R.id.tStores:
                 setSelectedTab(1);
@@ -344,7 +348,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 if(active!=0)
                     togglevisibility(true, active - 1);
                 findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
-
+                ImageButton imb = (ImageButton)findViewById(R.id.switch_acc);
+                imb.setVisibility(View.VISIBLE);
+                imb.setImageResource(R.drawable.calendaradd);
                 findViewById(R.id.viewpager).setVisibility(View.GONE);
                 break;
             case R.id.tFavorites:
@@ -352,23 +358,29 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 viewPager.setCurrentItem(2, false);
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
+                findViewById(R.id.switch_acc).setVisibility(View.GONE);
                 break;
             case R.id.tMore:
                 setSelectedTab(3);
                 viewPager.setCurrentItem(3, false);
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
+                findViewById(R.id.switch_acc).setVisibility(View.GONE);
                 break;
             case R.id.tNotes:
                 setSelectedTab(4);
                 viewPager.setCurrentItem(4, false);
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
+                ImageButton imb2 = (ImageButton)findViewById(R.id.switch_acc);
+                imb2.setVisibility(View.VISIBLE);
+                imb2.setImageResource(R.drawable.gmailadd);
                 break;
             case R.id.tRSS:
                 setSelectedTab(5);
                 viewPager.setCurrentItem(5, false);
                 togglevisibility(false, 0);
+                findViewById(R.id.switch_acc).setVisibility(View.GONE);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 break;
         }
@@ -393,14 +405,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     frame1activate.setVisibility(View.GONE);
                     frame1content.setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
-                    findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.calendarframe3).setVisibility(View.VISIBLE);
                     refreshResults(calno);
                     break;
                 case 3:
                     frame1activate.setVisibility(View.GONE);
                     frame1content.setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
-                    findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.calendarframe3).setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe4).setVisibility(View.VISIBLE);
                     refreshResults(calno);
                     break;
