@@ -39,6 +39,7 @@ public class FragmentGmail extends Fragment {
         if (MainActivity.dataStrings.size()==0){
             listView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
+            no_account.setVisibility(View.GONE);
             SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
             String name = settings.getString(MainActivity.PREF_ACCOUNT_NAME, "");
             if(name.equals("")){

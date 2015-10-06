@@ -48,10 +48,21 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/calendarframe1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textStyle="italic"
+                    android:id="@+id/frame1activate"
+                    android:text="No Logged in GMail Account"
+                    android:textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="#11FFFFFF"
+                    android:layout_margin="5dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:orientation="vertical"
                     android:background="#11FFFFFF"
                     android:id="@+id/frame1content"
@@ -80,28 +91,18 @@
                         android:textColor="#AAAAAA"
                         android:layout_margin="5dp"
                         android:id="@+id/resultstext1"/>
-            `   </LinearLayout>
+            </LinearLayout>
             </FrameLayout>
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:id="@+id/calendarframe2">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textStyle="italic"
-                    android:id="@+id/frame2activate"
-                    android:text="Touch to add another account"
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="#11FFFFFF"
-                    android:layout_margin="5dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:orientation="vertical"
                     android:id="@+id/frame2content"
                     android:background="#11FFFFFF"
@@ -139,27 +140,19 @@
             android:layout_weight="1"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal"
+
+            android:visibility="gone"
             android:id="@+id/textslayout2">
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/calendarframe3">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textStyle="italic"
-                    android:id="@+id/frame3activate"
-                    android:text="Touch to add another account"
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="#11FFFFFF"
-                    android:layout_margin="5dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:orientation="vertical"
                     android:background="#11FFFFFF"
                     android:id="@+id/frame3content"
@@ -196,21 +189,11 @@
                 android:layout_weight="1"
                 android:id="@+id/calendarframe4"
                 android:visibility="gone">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textStyle="italic"
-                    android:id="@+id/frame4activate"
-                    android:text="Touch to add another account"
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="#11FFFFFF"
-                    android:layout_margin="5dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:orientation="vertical"
                     android:background="#11FFFFFF"
                     android:id="@+id/frame4content"

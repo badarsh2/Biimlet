@@ -176,6 +176,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         GmailApi();
         ads = (ImageSwitcher) findViewById(R.id.ads);
         startAdLoop();
+        frame1activate = (TextView) findViewById(R.id.frame1activate);
+        frame1content = (LinearLayout) findViewById(R.id.frame1content);
+        frame2content = (LinearLayout) findViewById(R.id.frame2content);
+        frame3content = (LinearLayout) findViewById(R.id.frame3content);
+        frame4content = (LinearLayout) findViewById(R.id.frame4content);
 
         findViewById(R.id.switch_acc).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,17 +197,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     } catch (Exception e) {
                     }
                 }
+                else if(viewPager.getCurrentItem()==1){
+                    togglevisibility(true,active);
+
+                }
             }
         });
 
 
 
-        frame2activate = (TextView) findViewById(R.id.frame2activate);
-        frame2content = (LinearLayout) findViewById(R.id.frame2content);
-        frame3activate = (TextView) findViewById(R.id.frame3activate);
-        frame3content = (LinearLayout) findViewById(R.id.frame3content);
-        frame4activate = (TextView) findViewById(R.id.frame4activate);
-        frame4content = (LinearLayout) findViewById(R.id.frame4content);
+
         findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
         activatecalendars();
         togglevisibility(false, 0);
@@ -210,8 +214,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void activatecalendars() {
-        togglevisibility(true, active);
-        frame2activate.setOnClickListener(new View.OnClickListener() {
+
+        /*frame2activate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 frame2activate.setVisibility(View.GONE);
@@ -229,13 +233,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 togglevisibility(true, 3);
                 refreshResults(active);
             }
-        });
+        });*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isGooglePlayServicesAvailable()) {
+        /*if (isGooglePlayServicesAvailable()) {
             if(active>0)
             refreshResults(active-1);
             else
@@ -243,7 +247,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         } else {
             mStatusText[active-1].setText("Google Play Services required: " +
                     "after installing, close and relaunch this app.");
-        }
+        }*/
     }
 
     @Override
@@ -273,6 +277,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                             editor.putString(PREF_ACCOUNT_NAME + (active - 1), accountName);
                             editor.commit();
                             acntname[active-1].setText(accountName);
+                            togglevisibility(true,active-1);
                         }
                         else {
                             if (isDeviceOnline()) {
@@ -336,7 +341,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 setSelectedTab(1);
                 viewPager.setCurrentItem(1, false);
                 //Toast.makeText(getApplicationContext(), String.valueOf(active), Toast.LENGTH_SHORT).show();
-                togglevisibility(true, active);
+                if(active!=0)
+                    togglevisibility(true, active - 1);
+                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
+
                 findViewById(R.id.viewpager).setVisibility(View.GONE);
                 break;
             case R.id.tFavorites:
@@ -369,32 +377,34 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private void togglevisibility(Boolean stat, int calno)
     {
         if(stat==true) {
-            if(calno==0) {
-                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
-                findViewById(R.id.textslayout2).setVisibility(View.GONE);
-            }
-            else if(calno==1) {
-//                frame2activate.setVisibility(View.GONE);
-//                frame2content.setVisibility(View.VISIBLE);
-                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
-                findViewById(R.id.textslayout2).setVisibility(View.GONE);
-            }
-            else if(calno==2) {
-                frame2activate.setVisibility(View.GONE);
-                frame2content.setVisibility(View.VISIBLE);
-                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
-                findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
-            }
-            else if(calno==3) {
-                findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
-                findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
-                findViewById(R.id.calendarframe4).setVisibility(View.VISIBLE);
-                frame4content.setVisibility(View.GONE);
-                frame4activate.setVisibility(View.VISIBLE);
-                frame3activate.setVisibility(View.GONE);
-                frame3content.setVisibility(View.VISIBLE);
-                frame2activate.setVisibility(View.GONE);
-                frame2content.setVisibility(View.VISIBLE);
+            switch (calno) {
+                case 0:
+                    frame1activate.setVisibility(View.GONE);
+                    frame1content.setVisibility(View.VISIBLE);
+                    refreshResults(calno);
+                    break;
+                case 1:
+                    frame1activate.setVisibility(View.GONE);
+                    frame1content.setVisibility(View.VISIBLE);
+                    findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
+                    refreshResults(calno);
+                    break;
+                case 2:
+                    frame1activate.setVisibility(View.GONE);
+                    frame1content.setVisibility(View.VISIBLE);
+                    findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
+                    refreshResults(calno);
+                    break;
+                case 3:
+                    frame1activate.setVisibility(View.GONE);
+                    frame1content.setVisibility(View.VISIBLE);
+                    findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.textslayout2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.calendarframe4).setVisibility(View.VISIBLE);
+                    refreshResults(calno);
+                    break;
+                case 4:Toast.makeText(getApplicationContext(),"Only Four accounts can be viewed",Toast.LENGTH_SHORT).show();
             }
         }
         else {
@@ -595,8 +605,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         FragmentGmail.progressBar.setVisibility(View.GONE);
                         FragmentGmail.no_account.setVisibility(View.GONE);
                     }catch (Exception e){}
-                    Toast.makeText(getApplicationContext(), "Data retrieved using" +
-                            " the Gmail API:", Toast.LENGTH_SHORT).show();
+
 
                     //listView.setAdapter(new CustomAdapter(getActivity(), dataStrings));
                     //mResultsText.setText(TextUtils.join("\n\n", dataStrings));
@@ -721,6 +730,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 transport, jsonFactory, credentialGmail)
                 .setApplicationName("Gmail API Android Quickstart")
                 .build();
+        if (credentialGmail.getSelectedAccountName() != null) {
+
+            if (isDeviceOnline()) {
+                new ApiAsyncTaskGmail(this).execute();
+            } else {
+                    Toast.makeText(getApplicationContext(),"No network connection available.",Toast.LENGTH_SHORT).show();
+            }
+        }
         /*if (isGooglePlayServicesAvailable()) {
             refreshResults();
         } else {
