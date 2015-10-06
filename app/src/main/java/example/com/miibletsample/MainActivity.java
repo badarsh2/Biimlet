@@ -188,6 +188,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     try {
                         FragmentGmail.listView.setVisibility(View.GONE);
                         FragmentGmail.progressBar.setVisibility(View.VISIBLE);
+                        FragmentGmail.no_account.setVisibility(View.GONE);
                     } catch (Exception e) {
                     }
                 }
@@ -271,6 +272,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putString(PREF_ACCOUNT_NAME + (active - 1), accountName);
                             editor.commit();
+                            acntname[active-1].setText(accountName);
                         }
                         else {
                             if (isDeviceOnline()) {
@@ -289,6 +291,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     }
                 } else if (resultCode == RESULT_CANCELED) {
                     mStatusText[active-1].setText("Account unspecified.");
+                    if(GMAIL_FLAG==0){
+                        chooseAccount(active);
+                    } else {
+                        credentialGmail.setSelectedAccountName(null);
+                        startActivityForResult(
+                                credentialGmail.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+                    }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
@@ -560,6 +569,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         mStatusText[i].setText("Error retrieving data!");
                     } else if (dataStrings.get(i).equals("")) {
                         mStatusText[i].setText("NO UPCOMING EVENTS.");
+                        mResultsText[i].setText("");
                     } else {
                         mStatusText[i].setText("UPCOMING EVENTS");
                         mResultsText[i].setText(dataStrings.get(i));
@@ -583,6 +593,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         FragmentGmail.listView.setAdapter(FragmentGmail.customAdapter);
                         FragmentGmail.listView.setVisibility(View.VISIBLE);
                         FragmentGmail.progressBar.setVisibility(View.GONE);
+                        FragmentGmail.no_account.setVisibility(View.GONE);
                     }catch (Exception e){}
                     Toast.makeText(getApplicationContext(), "Data retrieved using" +
                             " the Gmail API:", Toast.LENGTH_SHORT).show();

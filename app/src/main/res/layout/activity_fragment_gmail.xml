@@ -29,10 +29,18 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="visible"
+        android:visibility="gone"
         android:indeterminateTint="#ffffff"
         android:indeterminateTintMode="src_in"
         android:layout_gravity="center"
         />
+    <TextView
+        android:id="@+id/no_account"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textColor="#fff"
+        android:text="NO LOGGED IN ACCOUNTS"
+        android:gravity="center"/>
 
 </LinearLayout>
