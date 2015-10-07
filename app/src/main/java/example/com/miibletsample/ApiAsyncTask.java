@@ -75,6 +75,8 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
             public void onSuccess(Events events, HttpHeaders responseHeaders) throws IOException {
                 List<Event> items = events.getItems();
                 String eve = "";
+                List<String> eventname = new ArrayList<>();
+                List<String> eventtime = new ArrayList<>();
                 for (Event event : items) {
                     DateTime start = event.getStart().getDateTime();
                     if (start == null) {
@@ -82,6 +84,8 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
                         // the start date.
                         start = event.getStart().getDate();
                     }
+                    eventname.add(event.getSummary());
+                    eventtime.add(start.toString());
                     eve+=String.format("%s (%s)", event.getSummary(), start);
                 }
                 eventStrings.add(eve);
