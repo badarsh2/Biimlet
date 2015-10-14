@@ -1,6 +1,7 @@
 package example.com.miibletsample;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
@@ -24,13 +25,40 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
     private MainActivity mActivity;
     List<String> eventStrings;
     int k=0;
+    String mDate;
+    CalendarAdapter caladapter;
+    List<String> eventname, eventtime, colorarr;
+    private String[] colors = new String[]{
+            "#F44336",
+            "#E91E63",
+            "#9C27B0",
+            "#673AB7",
+            "#3F51B5",
+            "#2196F3",
+            "#03A9F4",
+            "#00BCD4",
+            "#009688",
+            "#4CAF50",
+            "#8BC34A",
+            "#CDDC39",
+            "#FFEB3B",
+            "#FFC107",
+            "#FF9800",
+            "#BF360C",
+            "#3E2723"
+
+    };
     /**
      * Constructor.
      * @param activity MainActivity that spawned this task.
      */
     ApiAsyncTask(MainActivity activity) {
         this.mActivity = activity;
+        this.mDate="01/01/1970";
     }
+
+    ApiAsyncTask(MainActivity activity, String date) { this.mActivity = activity;
+        this.mDate = date;}
 
     /**
      * Background task to call Google Calendar API.
@@ -75,8 +103,9 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
             public void onSuccess(Events events, HttpHeaders responseHeaders) throws IOException {
                 List<Event> items = events.getItems();
                 String eve = "";
-                List<String> eventname = new ArrayList<>();
-                List<String> eventtime = new ArrayList<>();
+                eventname = new ArrayList<>();
+                eventtime = new ArrayList<>();
+                colorarr = new ArrayList<>();
                 for (Event event : items) {
                     DateTime start = event.getStart().getDateTime();
                     if (start == null) {
@@ -85,10 +114,26 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
                         start = event.getStart().getDate();
                     }
                     eventname.add(event.getSummary());
-                    eventtime.add(start.toString());
+                    eventtime.add(String.format("%s", start));
+                    int randomNum = 0 + (int)(Math.random()*16);
+                    //String col = event.getColorId();
+                    //Log.d("color",col.toString());
+                    colorarr.add(colors[randomNum]);
                     eve+=String.format("%s (%s)", event.getSummary(), start);
                 }
                 eventStrings.add(eve);
+                final List<String> et = eventname;
+                final List<String> dt = eventtime;
+                final List<String> ca = colorarr;
+                final int s = eventStrings.size();
+                Log.d("ppppppppppppppp", eventStrings.size() + "");
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        caladapter = new CalendarAdapter(mActivity, dt, et, ca, mDate);
+                        mActivity.calendarlist[s-1].setAdapter(caladapter);
+                    }
+                });
             }
 
             @Override

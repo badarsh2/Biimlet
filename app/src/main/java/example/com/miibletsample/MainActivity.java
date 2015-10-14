@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,10 +31,12 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -49,8 +52,10 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.gmail.GmailScopes;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -60,6 +65,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     com.google.api.services.calendar.Calendar[] mService=new com.google.api.services.calendar.Calendar[4];
     com.google.api.services.gmail.Gmail mServicegmail;
     public static List<EMail> dataStrings = new ArrayList<>();
+    public ListView[] calendarlist=new ListView[4];
 
     GoogleAccountCredential[] credential=new GoogleAccountCredential[4];
     GoogleAccountCredential credentialGmail;
@@ -86,6 +92,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     SharedPreferences.Editor editor;
     private LinearLayout frame1content, frame2content, frame3content, frame4content;
     private TextView frame1activate, frame2activate, frame3activate, frame4activate;
+    private Button timechoose;
+    private String currdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +101,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //offerdialog();
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+        currdate = curFormater.format(c.getTime());
 
         findViewById(R.id.tRequest).setOnClickListener(this);
         findViewById(R.id.tStores).setOnClickListener(this);
@@ -146,6 +157,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         acntname[1] = (TextView)findViewById(R.id.accountname2);
         acntname[2] = (TextView)findViewById(R.id.accountname3);
         acntname[3] = (TextView)findViewById(R.id.accountname4);
+        calendarlist[0] = (ListView)findViewById(R.id.calendarlist1);
+        calendarlist[1] = (ListView)findViewById(R.id.calendarlist2);
+        calendarlist[2] = (ListView)findViewById(R.id.calendarlist3);
+        calendarlist[3] = (ListView)findViewById(R.id.calendarlist4);
+        timechoose = (Button) findViewById(R.id.timechoose);
         for(int i=0;i<4;i++) {
             mResultsText[i].setVerticalScrollBarEnabled(true);
             mResultsText[i].setMovementMethod(new ScrollingMovementMethod());
@@ -185,20 +201,36 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         findViewById(R.id.switch_acc).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewPager.getCurrentItem()==4) {
+                if (viewPager.getCurrentItem() == 4) {
                     credentialGmail.setSelectedAccountName(null);
                     startActivityForResult(
                             credentialGmail.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
-                    GMAIL_FLAG=1;
+                    GMAIL_FLAG = 1;
                     try {
                         FragmentGmail.listView.setVisibility(View.GONE);
                         FragmentGmail.progressBar.setVisibility(View.VISIBLE);
                         FragmentGmail.no_account.setVisibility(View.GONE);
                     } catch (Exception e) {
                     }
-                }
-                else if(viewPager.getCurrentItem()==1){
-                    togglevisibility(true,active);
+                } else if (viewPager.getCurrentItem() == 1) {
+                    togglevisibility(true, active);
+                    timechoose.setText(currdate.split("-")[2] + "/" + currdate.split("-")[1]+"/"+currdate.split("-")[0]);
+                    timechoose.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DialogFragment df = new DatePickerFragment() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int month, int day) {
+                                    // Do something with the date chosen by the user
+                                    timechoose.setText(day + "/" + (month + 1) + "/" + year);
+                                    refreshResults(active - 1, year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day));
+                                    currdate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+                                }
+                            };
+                            df.show(getSupportFragmentManager(), "DatePicker");
+
+                        }
+                    });
                 }
             }
         });
@@ -209,6 +241,27 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
         activatecalendars();
         togglevisibility(false, 0);
+
+        if(active!=0) {
+            timechoose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment df = new DatePickerFragment() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int day) {
+                            // Do something with the date chosen by the user
+                            timechoose.setText(day + "/" + (month + 1) + "/" + year);
+                            refreshResults(active - 1, year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day));
+                            currdate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+                        }
+                    };
+                    df.show(getSupportFragmentManager(), "DatePicker");
+
+                }
+            });
+        }
+        else
+            timechoose.setText("NOT LOGGED IN");
 
     }
 
@@ -294,7 +347,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         }
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-                    mStatusText[active-1].setText("Account unspecified.");
+                   // mStatusText[active-1].setText("Account unspecified.");
                     if(GMAIL_FLAG==0){
                         chooseAccount(active);
                     } else {
@@ -340,6 +393,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 findViewById(R.id.switch_acc).setVisibility(View.GONE);
+                findViewById(R.id.timechoose).setVisibility(View.GONE);
+                findViewById(R.id.caltitle).setVisibility(View.GONE);
                 break;
             case R.id.tStores:
                 setSelectedTab(1);
@@ -350,8 +405,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 findViewById(R.id.textslayout).setVisibility(View.VISIBLE);
                 ImageButton imb = (ImageButton)findViewById(R.id.switch_acc);
                 imb.setVisibility(View.VISIBLE);
+                findViewById(R.id.timechoose).setVisibility(View.VISIBLE);
                 imb.setImageResource(R.drawable.calendaradd);
                 findViewById(R.id.viewpager).setVisibility(View.GONE);
+                findViewById(R.id.caltitle).setVisibility(View.VISIBLE);
                 break;
             case R.id.tFavorites:
                 setSelectedTab(2);
@@ -359,6 +416,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 findViewById(R.id.switch_acc).setVisibility(View.GONE);
+                findViewById(R.id.timechoose).setVisibility(View.GONE);
+                findViewById(R.id.caltitle).setVisibility(View.GONE);
                 break;
             case R.id.tMore:
                 setSelectedTab(3);
@@ -366,6 +425,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 togglevisibility(false, 0);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 findViewById(R.id.switch_acc).setVisibility(View.GONE);
+                findViewById(R.id.timechoose).setVisibility(View.GONE);
+                findViewById(R.id.caltitle).setVisibility(View.GONE);
                 break;
             case R.id.tNotes:
                 setSelectedTab(4);
@@ -375,6 +436,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 ImageButton imb2 = (ImageButton)findViewById(R.id.switch_acc);
                 imb2.setVisibility(View.VISIBLE);
                 imb2.setImageResource(R.drawable.gmailadd);
+                findViewById(R.id.timechoose).setVisibility(View.GONE);
+                findViewById(R.id.caltitle).setVisibility(View.GONE);
                 break;
             case R.id.tRSS:
                 setSelectedTab(5);
@@ -382,6 +445,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 togglevisibility(false, 0);
                 findViewById(R.id.switch_acc).setVisibility(View.GONE);
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
+                findViewById(R.id.timechoose).setVisibility(View.GONE);
+                findViewById(R.id.caltitle).setVisibility(View.GONE);
                 break;
         }
     }
@@ -393,20 +458,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 case 0:
                     frame1activate.setVisibility(View.GONE);
                     frame1content.setVisibility(View.VISIBLE);
-                    refreshResults(calno);
+                    refreshResults(calno, currdate);
                     break;
                 case 1:
                     frame1activate.setVisibility(View.GONE);
                     frame1content.setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
-                    refreshResults(calno);
+                    refreshResults(calno, currdate);
                     break;
                 case 2:
                     frame1activate.setVisibility(View.GONE);
                     frame1content.setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe3).setVisibility(View.VISIBLE);
-                    refreshResults(calno);
+                    refreshResults(calno, currdate);
                     break;
                 case 3:
                     frame1activate.setVisibility(View.GONE);
@@ -414,7 +479,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     findViewById(R.id.calendarframe2).setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe3).setVisibility(View.VISIBLE);
                     findViewById(R.id.calendarframe4).setVisibility(View.VISIBLE);
-                    refreshResults(calno);
+                    refreshResults(calno, currdate);
                     break;
                 case 4:Toast.makeText(getApplicationContext(),"Only Four accounts can be viewed",Toast.LENGTH_SHORT).show();
             }
@@ -543,13 +608,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         //alertDialog.show();
     }
 
-    private void refreshResults(int i) {
+    private void refreshResults(int i, String date) {
         if (credential[i].getSelectedAccountName() == null) {
             chooseAccount(i);
         } else {
             if (isDeviceOnline()) {
 
-                new ApiAsyncTask(this).execute();
+                new ApiAsyncTask(this, date).execute();
                 new ApiAsyncTaskGmail(this).execute();
             } else {
                 int p=i;
