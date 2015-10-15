@@ -31,18 +31,23 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -68,18 +73,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public ListView[] calendarlist=new ListView[4];
 
     GoogleAccountCredential[] credential=new GoogleAccountCredential[4];
+    GoogleApiClient[] googleApiClients = new GoogleApiClient[4];
     GoogleAccountCredential credentialGmail;
     private TextView[] mStatusText=new TextView[4];
     private TextView[] mResultsText=new TextView[4];
-    private TextView[] acntname = new TextView[4];
+    public TextView[] acntname = new TextView[4];
+    public TextView[] addeventbtns = new TextView[4];
+    public TextView[] alldaytexts=new TextView[4];
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
+    public static boolean mResolvingError = false;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     public static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY, GmailScopes.GMAIL_READONLY };
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY, GmailScopes.GMAIL_READONLY, CalendarScopes.CALENDAR };
     private ImageSwitcher ads;
     private Handler adHandler;
     private Runnable adRunner;
@@ -92,6 +100,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     SharedPreferences.Editor editor;
     private LinearLayout frame1content, frame2content, frame3content, frame4content;
     private TextView frame1activate, frame2activate, frame3activate, frame4activate;
+    public ImageView[] profimages = new ImageView[4];
     private Button timechoose;
     private String currdate;
 
@@ -161,6 +170,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         calendarlist[1] = (ListView)findViewById(R.id.calendarlist2);
         calendarlist[2] = (ListView)findViewById(R.id.calendarlist3);
         calendarlist[3] = (ListView)findViewById(R.id.calendarlist4);
+        alldaytexts[0] = (TextView)findViewById(R.id.alldaytext1);
+        alldaytexts[1] = (TextView)findViewById(R.id.alldaytext2);
+        alldaytexts[2] = (TextView)findViewById(R.id.alldaytext3);
+        alldaytexts[3] = (TextView)findViewById(R.id.alldaytext4);
+        addeventbtns[0] = (TextView)findViewById(R.id.addeventbtn1);
+        addeventbtns[1] = (TextView)findViewById(R.id.addeventbtn2);
+        addeventbtns[2] = (TextView)findViewById(R.id.addeventbtn3);
+        addeventbtns[3] = (TextView)findViewById(R.id.addeventbtn4);
+        profimages[0] = (ImageView) findViewById(R.id.profimg1);
+        profimages[1] = (ImageView) findViewById(R.id.profimg2);
+        profimages[2] = (ImageView) findViewById(R.id.profimg3);
+        profimages[3] = (ImageView) findViewById(R.id.profimg4);
         timechoose = (Button) findViewById(R.id.timechoose);
         for(int i=0;i<4;i++) {
             mResultsText[i].setVerticalScrollBarEnabled(true);
@@ -176,9 +197,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     getApplicationContext(), Arrays.asList(SCOPES))
                     .setBackOff(new ExponentialBackOff())
                     .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME + i, null));
-            String name = settings.getString(PREF_ACCOUNT_NAME+i, "");
+            //credential[i].get
+            String name = settings.getString(PREF_ACCOUNT_NAME+"profile_name" + i,"");
+            String pic = settings.getString(PREF_ACCOUNT_NAME+"profile_pic" + i,"");
             if(!name.equals("")) {
                 acntname[i].setText(name);
+                new DownloadImageTask(profimages[i]).execute(pic);
+            }
+            if(i<active) {
+                googleApiClients[i] = new GoogleApiClient.Builder(this)
+                        .addConnectionCallbacks(new GoogleConnect(i,this))
+                        .addOnConnectionFailedListener(new GoogleConnect(i,this))
+                        .addApi(Plus.API)
+                        .addScope(Plus.SCOPE_PLUS_LOGIN)
+                        .setAccountName(settings.getString(PREF_ACCOUNT_NAME + i, null))
+                        .build();
+                googleApiClients[i].connect();
             }
             mService[i] = new com.google.api.services.calendar.Calendar.Builder(
                     transport, jsonFactory, credential[i])
@@ -320,6 +354,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     if (accountName != null) {
                         if(GMAIL_FLAG==0) {
                             credential[active].setSelectedAccountName(accountName);
+                            googleApiClients[active] = new GoogleApiClient.Builder(this)
+                                    .addApi(Plus.API)
+                                    .addConnectionCallbacks(new GoogleConnect(active,this))
+                                    .addOnConnectionFailedListener(new GoogleConnect(active, this))
+                                    .addScope(Plus.SCOPE_PLUS_LOGIN)
+                                    .setAccountName(accountName)
+                                    .build();
+                            googleApiClients[active].connect();
                             editor = sharedpreferences.edit();
                             editor.putInt("active", ++active);
                             editor.apply();
@@ -328,7 +370,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putString(PREF_ACCOUNT_NAME + (active - 1), accountName);
                             editor.commit();
-                            acntname[active-1].setText(accountName);
+                            //acntname[active-1].setText(accountName);
                             togglevisibility(true,active-1);
                         }
                         else {
@@ -364,6 +406,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 else  {
                     new ApiAsyncTask(this).execute();
                     new ApiAsyncTaskGmail(this).execute();
+                }
+                mResolvingError = false;
+                if (resultCode == RESULT_OK) {
+                    // Make sure the app is not already connected or attempting to connect
+                    if (!googleApiClients[active-1].isConnecting() && !googleApiClients[active-1].isConnected()) {
+                        googleApiClients[active-1].connect();
+                    }
                 }
                 break;
         }
@@ -607,6 +656,145 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // show it
         //alertDialog.show();
     }
+
+//    public void addeventdialog(String name){
+//        //Toast.makeText(getApplicationContext(),notifobject.toString(),Toast.LENGTH_LONG).show();
+//        //freebielayout.getForeground().setAlpha(255);
+//        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+//        final View ltdofferView = li.inflate(R.layout.calendar_event, null);
+//
+//        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+//        final Button okbutton = (Button) ltdofferView.findViewById(R.id.okbutton);
+//        final ImageButton cancelbutton= (ImageButton) ltdofferView.findViewById(R.id.cancelbutton);
+//        final TextView accname = (TextView) ltdofferView.findViewById(R.id.acc_addevent);
+//        final TextView startdate = (TextView) ltdofferView.findViewById(R.id.startdate);
+//        final TextView starttime = (TextView) ltdofferView.findViewById(R.id.starttime);
+//        final TextView enddate = (TextView) ltdofferView.findViewById(R.id.enddate);
+//        final TextView endtime = (TextView) ltdofferView.findViewById(R.id.endtime);
+//
+//        final Calendar c = Calendar.getInstance();
+//        int hour = c.get(Calendar.HOUR_OF_DAY);
+//        int minute = c.get(Calendar.MINUTE);
+//        int year = c.get(Calendar.YEAR);
+//        int month = c.get(Calendar.MONTH);
+//        int day = c.get(Calendar.DAY_OF_MONTH);
+//        startdate.setText(day+"/"+month+"/"+year);
+//        enddate.setText(day+"/"+month+"/"+year);
+//        starttime.setText(hour+":"+String.format("%02d", minute));
+//        endtime.setText((hour+1)+":"+String.format("%02d", minute));
+//
+//        alertDialogBuilder.setView(ltdofferView);
+//        alertDialogBuilder
+//                .setCancelable(true);
+//        // create alert dialog
+//
+//        final AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//        lp.copyFrom(alertDialog.getWindow().getAttributes());
+//        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+//        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//        lp.gravity= Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL;
+//        //alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//        alertDialog.show();
+//        alertDialog.getWindow().setAttributes(lp);
+//        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//        okbutton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                alertDialog.dismiss();
+//                //freebielayout.getForeground().setAlpha(0);
+//            }
+//        });
+//        cancelbutton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                alertDialog.dismiss();
+//                //freebielayout.getForeground().setAlpha(0);
+//            }
+//        });
+//        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialogInterface) {
+//                //freebielayout.getForeground().setAlpha(0);
+//            }
+//        });
+//        accname.setText(name);
+//        startdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogFragment df = new DatePickerFragment() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int month, int day) {
+//                        // Do something with the date chosen by the user
+//                        startdate.setText(day + "/" + (month + 1) + "/" + year);
+//                        //currdate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+//                    }
+//                };
+//                df.show(getSupportFragmentManager(), "DatePicker");
+//            }
+//        });
+//
+//        enddate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogFragment df = new DatePickerFragment() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int month, int day) {
+//                        // Do something with the date chosen by the user
+//                        enddate.setText(day + "/" + (month + 1) + "/" + year);
+//                        //currdate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+//                    }
+//                };
+//                df.show(getSupportFragmentManager(), "DatePicker");
+//            }
+//        });
+//
+//        starttime.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogFragment df = new TimePickerFragment() {
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        // Do something with the date chosen by the user
+//                        starttime.setText(hourOfDay + ":" + (minute));
+//                        //currdate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+//                    }
+//                };
+//                df.show(getSupportFragmentManager(), "TimePicker");
+//            }
+//        });
+//
+//        endtime.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogFragment df = new TimePickerFragment() {
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        // Do something with the date chosen by the user
+//                        endtime.setText(hourOfDay + ":" + (minute));
+//                        //currdate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+//                    }
+//                };
+//                df.show(getSupportFragmentManager(), "DatePicker");
+//            }
+//        });
+//
+//        final Switch alldayswitch = (Switch) ltdofferView.findViewById(R.id.alldayswitch);
+//        alldayswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    ltdofferView.findViewById(R.id.datesandtimes).setVisibility(View.GONE);
+//                }
+//                else {
+//                    ltdofferView.findViewById(R.id.datesandtimes).setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//    }
 
     private void refreshResults(int i, String date) {
         if (credential[i].getSelectedAccountName() == null) {

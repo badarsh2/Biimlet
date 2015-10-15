@@ -93,7 +93,7 @@ public class CalendarAdapter extends BaseAdapter {
 //        holder.subject.setText(modelData.get(position).Subject);
 //        holder.snippet.setText(modelData.get(position).Snippet);
         int ind = checkindex(position);
-        holder.time.setText(String.format("%02d", position)+":00");
+        holder.time.setText(String.format("%02d", position) + ":00");
         if(ind!=-1) {
             if(currdate.equals((dates.get(ind)).split("T")[0])) {
 
@@ -117,19 +117,39 @@ public class CalendarAdapter extends BaseAdapter {
             //Date date = new SimpleDateFormat("HH:mm:ss.SSS+zz:yy").parse((dates.get(i).split("T"))[1]);
             //String newstring = new SimpleDateFormat("HH").format(date);
             //int hour = Integer.valueOf(newstring);
-            int hour = Integer.valueOf((dates.get(i).split("T"))[1].split(":")[0]);
-            Log.d("kkkkkk", String.valueOf(hour));
-            if (hour == position) {
-                Log.d("kkkkkk", "jjjjjj");
-                return i;
+            if(currdate.equals((dates.get(i)))) {
+                allday(events.get(i));
+                //int hour = Integer.valueOf((dates.get(i).split("T"))[1].split(":")[0]);
+                //Log.d("kkkkkk", String.valueOf(hour));
+                //if (hour == position) {
+                    //Log.d("kkkkkk", "jjjjjj");
+                    //return i;
 
-                //System.out.println(newstring);
+                    //System.out.println(newstring);
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
+                }
+
+            else if(currdate.equals((dates.get(i)).split("T")[0])) {
+                int hour = Integer.valueOf((dates.get(i).split("T"))[1].split(":")[0]);
+                Log.d("kkkkkk", String.valueOf(hour));
+                if (hour == position) {
+                    Log.d("kkkkkk", "jjjjjj");
+                    return i;
+
+                    //System.out.println(newstring);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+                }
             }
         }
         return -1;
+    }
+
+    public void allday(String s) {
+        //events.get(ind)
     }
 
     public void changeData(List<EMail> modeldata) {
