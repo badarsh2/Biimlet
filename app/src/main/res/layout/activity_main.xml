@@ -84,11 +84,12 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_weight = "1"
+                                android:orientation="vertical"
                                 android:layout_height="match_parent">
                             <TextView
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_weight="1"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
                                 android:layout_gravity="center"
                                 android:minLines="1"
                                 android:maxLines="1"
@@ -97,24 +98,27 @@
                                 android:textColor="#EEEEEE"
                                 android:textStyle="italic"/>
                                 <ImageButton
+                                    android:id="@+id/conf1"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src=""/>
+                                    android:layout_height="0dp"
+                                    android:scaleType="fitCenter"
+                                    android:layout_weight="1"
+                                    android:background="#00000000"
+                                    android:src="@drawable/settings"/>
                                 </LinearLayout>
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:id="@+id/profimg1"/>
                         </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
+                        <ImageButton
+                            android:background="#00000000"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="0dp"
                             android:id="@+id/addeventbtn1"
-                            android:text="+"
-                            android:gravity="center"
-                            android:textSize="40sp"
-                            android:textStyle="bold"
-                            android:textColor="#FF0000"/>
+                            android:src="@drawable/addevent"
+                            />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -178,31 +182,44 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:minLines="2"
-                                android:maxLines="2"
-                                android:text="Account name"
-                                android:id="@+id/accountname2"
-                                android:textColor="#EEEEEE"
-                                android:textStyle="italic"/>
+                                android:layout_weight = "1"
+                                android:orientation="vertical"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_weight="1"
+                                    android:layout_height="0dp"
+                                    android:layout_gravity="center"
+                                    android:minLines="1"
+                                    android:maxLines="1"
+                                    android:text="Account name"
+                                    android:id="@+id/accountname2"
+                                    android:textColor="#EEEEEE"
+                                    android:textStyle="italic"/>
+                                <ImageButton
+                                    android:id="@+id/conf2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#00000000"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/settings"/>
+                            </LinearLayout>
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:id="@+id/profimg2"/>
                         </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
+                        <ImageButton
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="0dp"
+                            android:background="#00000000"
                             android:id="@+id/addeventbtn2"
-                            android:text="+"
-                            android:textSize="40sp"
-                            android:textStyle="bold"
-                            android:textColor="#FF0000"/>
+                            android:src="@drawable/addevent"
+                            />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -254,31 +271,44 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:minLines="2"
-                                android:maxLines="2"
-                                android:text="Account name"
-                                android:id="@+id/accountname3"
-                                android:textColor="#EEEEEE"
-                                android:textStyle="italic"/>
+                                android:layout_weight = "1"
+                                android:orientation="vertical"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_weight="1"
+                                    android:layout_height="0dp"
+                                    android:layout_gravity="center"
+                                    android:minLines="1"
+                                    android:maxLines="1"
+                                    android:text="Account name"
+                                    android:id="@+id/accountname3"
+                                    android:textColor="#EEEEEE"
+                                    android:textStyle="italic"/>
+                                <ImageButton
+                                    android:id="@+id/conf3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#00000000"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/settings"/>
+                            </LinearLayout>
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:id="@+id/profimg3"/>
                         </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
+                        <ImageButton
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="0dp"
+                            android:background="#00000000"
                             android:id="@+id/addeventbtn3"
-                            android:text="+"
-                            android:textSize="40sp"
-                            android:textStyle="bold"
-                            android:textColor="#FF0000"/>
+                            android:src="@drawable/addevent"
+                            />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -330,31 +360,44 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:minLines="2"
-                                android:maxLines="2"
-                                android:text="Account name"
-                                android:id="@+id/accountname4"
-                                android:textColor="#EEEEEE"
-                                android:textStyle="italic"/>
+                                android:layout_weight = "1"
+                                android:orientation="vertical"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_weight="1"
+                                    android:layout_height="0dp"
+                                    android:layout_gravity="center"
+                                    android:minLines="1"
+                                    android:maxLines="1"
+                                    android:text="Account name"
+                                    android:id="@+id/accountname4"
+                                    android:textColor="#EEEEEE"
+                                    android:textStyle="italic"/>
+                                <ImageButton
+                                    android:id="@+id/conf4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#00000000"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/settings"/>
+                            </LinearLayout>
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:id="@+id/profimg4"/>
                         </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
+                        <ImageButton
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="0dp"
+                            android:background="#00000000"
                             android:id="@+id/addeventbtn4"
-                            android:text="+"
-                            android:textSize="40sp"
-                            android:textStyle="bold"
-                            android:textColor="#FF0000"/>
+                            android:src="@drawable/addevent"
+                            />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

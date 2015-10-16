@@ -169,10 +169,15 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private List<String> getDataFromApi() throws IOException {
         // List the next 10 events from the primary calendar.
-        mActivity.alldaytexts[0].setVisibility(View.INVISIBLE);
-        mActivity.alldaytexts[1].setVisibility(View.INVISIBLE);
-        mActivity.alldaytexts[2].setVisibility(View.INVISIBLE);
-        mActivity.alldaytexts[3].setVisibility(View.INVISIBLE);
+        mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mActivity.alldaytexts[0].setVisibility(View.INVISIBLE);
+                                        mActivity.alldaytexts[1].setVisibility(View.INVISIBLE);
+                                        mActivity.alldaytexts[2].setVisibility(View.INVISIBLE);
+                                        mActivity.alldaytexts[3].setVisibility(View.INVISIBLE);
+                                    }
+                                });
         BatchRequest b = mActivity.mService[0].batch();
         JsonBatchCallback<Events> bc = new JsonBatchCallback<Events>() {
 
@@ -306,13 +311,8 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
                 EventDateTime start = new EventDateTime()
                         .setDateTime(startDateTime);
                 if (ALL_DAY) {
-                    Calendar c = Calendar.getInstance();
-                    starthour = c.get(Calendar.HOUR_OF_DAY);
-                    startminute = c.get(Calendar.MINUTE);
-                    startyear = c.get(Calendar.YEAR);
-                    startmonth = c.get(Calendar.MONTH);
-                    startday = c.get(Calendar.DAY_OF_MONTH);
-                    startDateTime = new DateTime(startyear + "-" + String.format("%02d", (startmonth + 1)) + "-" + String.format("%02d", startday) + "T" + String.format("%02d", starthour) + ":" + String.format("%02d", startminute) + ":00+05:30");
+
+                    startDateTime = new DateTime(startyear + "-" + String.format("%02d", (startmonth + 1)) + "-" + String.format("%02d", startday));
                     start = new EventDateTime()
                             .setDateTime(startDateTime);
                 }
@@ -323,15 +323,10 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
                 EventDateTime end = new EventDateTime()
                         .setDateTime(endDateTime);
                 if (ALL_DAY) {
-                    Calendar c = Calendar.getInstance();
-                    endhour = c.get(Calendar.HOUR_OF_DAY);
-                    endminute = c.get(Calendar.MINUTE);
-                    endyear = c.get(Calendar.YEAR);
-                    endmonth = c.get(Calendar.MONTH);
-                    endday = c.get(Calendar.DAY_OF_MONTH);
-                    endDateTime = new DateTime(endyear + "-" + String.format("%02d", (endmonth + 1)) + "-" + String.format("%02d", endday) + "T" + String.format("%02d", endhour) + ":" + String.format("%02d", endminute) + ":00+05:30");
+
+                    endDateTime = new DateTime(endyear + "-" + String.format("%02d", (endmonth + 1)) + "-" + String.format("%02d", endday) );
                     end = new EventDateTime()
-                            .setDateTime(startDateTime);
+                            .setDateTime(endDateTime);
                 }
                 event.setEnd(end);
 
@@ -461,10 +456,12 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     ALL_DAY = true;
-                    ltdofferView.findViewById(R.id.datesandtimes).setVisibility(View.GONE);
+                    ltdofferView.findViewById(R.id.starttime).setVisibility(View.GONE);
+                    ltdofferView.findViewById(R.id.endtime).setVisibility(View.GONE);
                 } else {
                     ALL_DAY = false;
-                    ltdofferView.findViewById(R.id.datesandtimes).setVisibility(View.VISIBLE);
+                    ltdofferView.findViewById(R.id.starttime).setVisibility(View.VISIBLE);
+                    ltdofferView.findViewById(R.id.endtime).setVisibility(View.VISIBLE);
                 }
             }
         });

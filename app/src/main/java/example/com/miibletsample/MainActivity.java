@@ -31,16 +31,13 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -78,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private TextView[] mStatusText=new TextView[4];
     private TextView[] mResultsText=new TextView[4];
     public TextView[] acntname = new TextView[4];
-    public TextView[] addeventbtns = new TextView[4];
+    public ImageButton[] addeventbtns = new ImageButton[4];
     public TextView[] alldaytexts=new TextView[4];
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -103,6 +100,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public ImageView[] profimages = new ImageView[4];
     private Button timechoose;
     private String currdate;
+    public static boolean CHANGE_ACCNT=false;
+    public static int accnt_ind = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +119,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         findViewById(R.id.tMore).setOnClickListener(this);
         findViewById(R.id.tNotes).setOnClickListener(this);
         findViewById(R.id.tRSS).setOnClickListener(this);
+        findViewById(R.id.conf1).setOnClickListener(this);
+        findViewById(R.id.conf2).setOnClickListener(this);
+        findViewById(R.id.conf3).setOnClickListener(this);
+        findViewById(R.id.conf4).setOnClickListener(this);
+
         layouts = new LinearLayout[] { (LinearLayout) findViewById(R.id.tRequest), (LinearLayout) findViewById(R.id.tStores), (LinearLayout) findViewById(R.id.tFavorites), (LinearLayout) findViewById(R.id.tMore), (LinearLayout) findViewById(R.id.tNotes), (LinearLayout) findViewById(R.id.tRSS) };
 
         viewPager = (NonSwipeablePager) findViewById(R.id.viewpager);
@@ -174,10 +178,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         alldaytexts[1] = (TextView)findViewById(R.id.alldaytext2);
         alldaytexts[2] = (TextView)findViewById(R.id.alldaytext3);
         alldaytexts[3] = (TextView)findViewById(R.id.alldaytext4);
-        addeventbtns[0] = (TextView)findViewById(R.id.addeventbtn1);
-        addeventbtns[1] = (TextView)findViewById(R.id.addeventbtn2);
-        addeventbtns[2] = (TextView)findViewById(R.id.addeventbtn3);
-        addeventbtns[3] = (TextView)findViewById(R.id.addeventbtn4);
+        addeventbtns[0] = (ImageButton)findViewById(R.id.addeventbtn1);
+        addeventbtns[1] = (ImageButton)findViewById(R.id.addeventbtn2);
+        addeventbtns[2] = (ImageButton)findViewById(R.id.addeventbtn3);
+        addeventbtns[3] = (ImageButton)findViewById(R.id.addeventbtn4);
         profimages[0] = (ImageView) findViewById(R.id.profimg1);
         profimages[1] = (ImageView) findViewById(R.id.profimg2);
         profimages[2] = (ImageView) findViewById(R.id.profimg3);
@@ -353,25 +357,32 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         if(GMAIL_FLAG==0) {
-                            credential[active].setSelectedAccountName(accountName);
-                            googleApiClients[active] = new GoogleApiClient.Builder(this)
+                            int ind = active;
+                            if(CHANGE_ACCNT){
+                                ind = accnt_ind;
+                                CHANGE_ACCNT = false;
+                            }
+                            credential[ind].setSelectedAccountName(accountName);
+                            googleApiClients[ind] = new GoogleApiClient.Builder(this)
                                     .addApi(Plus.API)
-                                    .addConnectionCallbacks(new GoogleConnect(active,this))
-                                    .addOnConnectionFailedListener(new GoogleConnect(active, this))
+                                    .addConnectionCallbacks(new GoogleConnect(ind,this))
+                                    .addOnConnectionFailedListener(new GoogleConnect(ind, this))
                                     .addScope(Plus.SCOPE_PLUS_LOGIN)
                                     .setAccountName(accountName)
                                     .build();
-                            googleApiClients[active].connect();
-                            editor = sharedpreferences.edit();
-                            editor.putInt("active", ++active);
-                            editor.apply();
+                            googleApiClients[ind].connect();
+                            if(ind == active) {
+                                editor = sharedpreferences.edit();
+                                editor.putInt("active", ++active);
+                                editor.apply();
+                            }
                             SharedPreferences settings =
                                     getPreferences(Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = settings.edit();
-                            editor.putString(PREF_ACCOUNT_NAME + (active - 1), accountName);
+                            editor.putString(PREF_ACCOUNT_NAME + (ind), accountName);
                             editor.commit();
                             //acntname[active-1].setText(accountName);
-                            togglevisibility(true,active-1);
+                            togglevisibility(true,ind);
                         }
                         else {
                             if (isDeviceOnline()) {
@@ -496,6 +507,30 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 findViewById(R.id.viewpager).setVisibility(View.VISIBLE);
                 findViewById(R.id.timechoose).setVisibility(View.GONE);
                 findViewById(R.id.caltitle).setVisibility(View.GONE);
+                break;
+            case R.id.conf1:
+                credential[0].setSelectedAccountName(null);
+                CHANGE_ACCNT = true;
+                accnt_ind = 0;
+                refreshResults(0, currdate);
+                break;
+            case R.id.conf2:
+                credential[1].setSelectedAccountName(null);
+                CHANGE_ACCNT = true;
+                accnt_ind = 1;
+                refreshResults(1, currdate);
+                break;
+            case R.id.conf3:
+                credential[2].setSelectedAccountName(null);
+                CHANGE_ACCNT = true;
+                accnt_ind = 2;
+                refreshResults(2, currdate);
+                break;
+            case R.id.conf4:
+                credential[3].setSelectedAccountName(null);
+                CHANGE_ACCNT = true;
+                accnt_ind = 3;
+                refreshResults(3, currdate);
                 break;
         }
     }
